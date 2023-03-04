@@ -7,8 +7,12 @@ interface IBanditClub {
     function subscribe(address subscriber, uint256 feesPaid) external;
 
     // Add a contract to the registry
-    function addContract(address cntrct, address owner) external;
+    function registerContract(address cntrct, address owner) external;
 
     // As a deployer of a Bandit Club contract, you can claim fees
-    function claimSubscriptionFees() external;
+    function claimSubscriptionFees(address cntrct) external;
+
+    // When calling a function, check to make sure a user is subscribed
+    // and they have enough points left
+    function checkUserCall(address user) external;
 }

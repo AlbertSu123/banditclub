@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
+import "forge-std/console.sol";
 
 contract BanditClub {
     // ------------------ Data Structures ---------------------------
@@ -29,7 +30,7 @@ contract BanditClub {
     }
 
     // Add a contract to the registry
-    function addContract(address cntrct, address feeRecipient) external {
+    function registerContract(address cntrct, address feeRecipient) external {
         require(
             registeredContracts[cntrct].feeRecipient == address(0),
             "Contract already registered"
@@ -53,6 +54,13 @@ contract BanditClub {
         require(sent, "Failed to send Ether");
     }
 
+    // When calling a function, check to make sure a user is subscribed
+    // and they have enough points left
+    function checkUserCall(address user) public {
+        userPoints[user] -= actionToPoints();
+        require(userPoints[user] >= 0);
+    }
+
     // ----------------- Internal Functions -------------------------
     // For each contract, see how much fees are owed
     function calculateFeesOwed(uint256 points) internal view returns (uint256) {
@@ -69,18 +77,5 @@ contract BanditClub {
     function actionToPoints() internal pure returns (uint256) {
         // TODO: figure out how many points an action is worth
         return 1;
-    }
-
-    // When calling a function, check to make sure a user is subscribed
-    // and they have enough points left
-    function checkUserCall(address user) internal {
-        userPoints[user] -= actionToPoints();
-        require(userPoints[user] >= 0);
-    }
-
-    // Just syntactic sugar to use a modifier instead of an internal function
-    modifier checkUser(address user) {
-        checkUserCall(user);
-        _;
     }
 }
