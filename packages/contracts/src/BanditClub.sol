@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
-import "forge-std/console.sol";
 
 contract BanditClub {
     // ------------------ Data Structures ---------------------------
@@ -58,7 +57,7 @@ contract BanditClub {
     // and they have enough points left
     function checkUserCall(address user) public {
         userPoints[user] -= actionToPoints();
-        require(userPoints[user] >= 0);
+        require(userPoints[user] >= 0, "Not enough points for this function");
     }
 
     // ----------------- Internal Functions -------------------------
