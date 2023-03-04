@@ -1,27 +1,14 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
 
-interface BanditClub {
+interface IBanditClub {
     // ------------------ External Functions ------------------------
     // Subscribe and start paying fees to Bandit Club
     function subscribe(address subscriber, uint256 feesPaid) external;
 
-    function addContract(address ontract) external;
+    // Add a contract to the registry
+    function addContract(address cntrct, address owner) external;
 
     // As a deployer of a Bandit Club contract, you can claim fees
     function claimSubscriptionFees() external;
-
-    // ----------------- Internal Function -------------------------
-    // For each contract, see how much fees are owed
-    function calculateFeesOwed() internal;
-
-    // Use this function to set the Usage Curve as desired
-    function feesToPoints() internal;
-
-    // Calculate how much points each action is worth
-    function actionToPoints() internal;
-
-    // When calling a function, check to make sure a user is subscribed
-    // and they have enough points left
-    function checkUser(address user) internal;
 }
