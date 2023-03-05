@@ -38,6 +38,7 @@ contract BanditClub {
             feeRecipient: feeRecipient,
             points: 0
         });
+        // TODO: Call every function in the cntrct to make sure they are gated
     }
 
     // As a deployer of a Bandit Club contract, you can claim fees

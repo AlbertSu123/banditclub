@@ -6,9 +6,8 @@ import "../IBanditClub.sol";
 contract SampleBanditClubContract {
     IBanditClub banditClub;
 
-    constructor(address BanditClub, address feeRecipient) {
+    constructor(address BanditClub) {
         banditClub = IBanditClub(BanditClub);
-        banditClub.registerContract(address(this), feeRecipient);
     }
 
     // You would need to add the checkUser modifier to every functon and inherit the BanditClub contract

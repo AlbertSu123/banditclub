@@ -13,9 +13,9 @@ contract E2E is Test {
         // Register a contract to Bandit Club
         vm.startPrank(contractDeployer);
         SampleBanditClubContract sample = new SampleBanditClubContract(
-            address(c),
-            contractDeployer
+            address(c)
         );
+        c.registerContract(address(sample), contractDeployer);
         vm.stopPrank();
 
         // Subscribe to Bandit Club to use their contracts
