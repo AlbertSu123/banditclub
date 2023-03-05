@@ -15,7 +15,7 @@ contract SampleBanditClubContract {
 
     // Just syntactic sugar to use a modifier instead of an internal function
     modifier checkUser(address user) {
-        banditClub.checkUserCall(user);
+        banditClub.checkUserCall(user, address(this));
         _;
     }
 }

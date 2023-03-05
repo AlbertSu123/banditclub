@@ -14,5 +14,5 @@ interface IBanditClub {
 
     // When calling a function, check to make sure a user is subscribed
     // and they have enough points left
-    function checkUserCall(address user) external;
+    function checkUserCall(address user, address cntrct) external;
 }

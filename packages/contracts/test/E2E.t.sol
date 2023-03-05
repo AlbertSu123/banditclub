@@ -1,6 +1,8 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
+import "forge-std/console.sol";
+
 import "../src/ancillary/SampleBanditClubContract.sol";
 import "../src/BanditClub.sol";
 
@@ -27,6 +29,37 @@ contract E2E is Test {
         // Collect fees as someone who has deployed contracts to bandit club
         vm.startPrank(contractDeployer);
         c.claimSubscriptionFees(address(sample));
+        vm.stopPrank();
+    }
+
+    function testGetListofAddresses() public {
+        vm.startPrank(contractDeployer);
+        SampleBanditClubContract sample = new SampleBanditClubContract(
+            address(c)
+        );
+        c.registerContract(address(sample), contractDeployer);
+        assert(c.registeredContractsList(0) == address(sample));
+        vm.stopPrank();
+    }
+
+    function testGetTotalFeesFromContract() public {
+        // Register a contract to Bandit Club
+        vm.startPrank(contractDeployer);
+        SampleBanditClubContract sample = new SampleBanditClubContract(
+            address(c)
+        );
+        c.registerContract(address(sample), contractDeployer);
+        vm.stopPrank();
+
+        // Subscribe to Bandit Club to use their contracts
+        vm.startPrank(bandit);
+        c.subscribe{value: 1 ether}(bandit);
+        sample.doSomething();
+        vm.stopPrank();
+
+        // Collect fees as someone who has deployed contracts to bandit club
+        vm.startPrank(contractDeployer);
+        assert(c.previewSubscriptionFeeClaim(address(sample)) > 0);
         vm.stopPrank();
     }
 

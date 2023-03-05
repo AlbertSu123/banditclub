@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
+import "forge-std/console.sol";
 
 contract BanditClub {
     // ------------------ Data Structures ---------------------------
@@ -9,6 +10,7 @@ contract BanditClub {
     }
     mapping(address => member) registeredContracts; // contract address => struct member
     mapping(address => uint256) userPoints; // user address => points
+    address[] public registeredContractsList;
 
     uint256 memberFees; // Amount of fees that belong to the members(contracts)
     uint256 clubFees; // Amount of fees that belong to the club
@@ -38,7 +40,17 @@ contract BanditClub {
             feeRecipient: feeRecipient,
             points: 0
         });
+        registeredContractsList.push(cntrct);
         // TODO: Call every function in the cntrct to make sure they are gated
+    }
+
+    function previewSubscriptionFeeClaim(address cntrct)
+        public
+        returns (uint256)
+    {
+        member storage m = registeredContracts[cntrct];
+        uint256 feesOwed = calculateFeesOwed(m.points);
+        return feesOwed;
     }
 
     // As a deployer of a Bandit Club contract, you can claim fees
@@ -56,8 +68,10 @@ contract BanditClub {
 
     // When calling a function, check to make sure a user is subscribed
     // and they have enough points left
-    function checkUserCall(address user) public {
+    function checkUserCall(address user, address cntrct) public {
         userPoints[user] -= actionToPoints();
+        member storage m = registeredContracts[cntrct];
+        m.points += actionToPoints();
         require(userPoints[user] >= 0, "Not enough points for this function");
     }
 
@@ -76,6 +90,6 @@ contract BanditClub {
     // Calculate how much points each action is worth
     function actionToPoints() internal pure returns (uint256) {
         // TODO: figure out how many points an action is worth
-        return 1;
+        return 100;
     }
 }
